@@ -394,6 +394,10 @@ public class DisplayListController extends BaseRestController {
                 ConfigurationProperties.getInstance().getPropertyValue(Property.PATIENT_SEX_REQUIRED));
         configs.put(Property.PATIENT_AGE_REQUIRED.toString(),
                 ConfigurationProperties.getInstance().getPropertyValue(Property.PATIENT_AGE_REQUIRED));
+        configs.put(Property.PATIENT_ART_NUMBER_SHOWN.toString(),
+                ConfigurationProperties.getInstance().getPropertyValue(Property.PATIENT_ART_NUMBER_SHOWN));
+        configs.put(Property.PATIENT_ART_NUMBER_REQUIRED.toString(),
+                ConfigurationProperties.getInstance().getPropertyValue(Property.PATIENT_ART_NUMBER_REQUIRED));
         configs.put(Property.PATIENT_ALIAS_ENABLED.toString(),
                 ConfigurationProperties.getInstance().getPropertyValue(Property.PATIENT_ALIAS_ENABLED));
         configs.put(Property.PATIENT_ALIAS_LABEL.toString(),

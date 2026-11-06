@@ -170,6 +170,13 @@ public class PatientManagementInfo implements Serializable {
             SamplePatientEntryBatch.class })
     private String customNotes;
 
+    @OptionalNotBlank(properties = { Property.PATIENT_ART_NUMBER_REQUIRED }, groups = {
+            SamplePatientEntryForm.SamplePatientEntry.class })
+    @Pattern(regexp = ValidationHelper.PATIENT_ID_REGEX, groups = { SamplePatientEntryForm.SamplePatientEntry.class,
+            SamplePatientEntryBatch.class })
+    @Size(max = 255)
+    private String artNumber;
+
     @SafeHtml(level = SafeHtml.SafeListLevel.NONE, groups = { SamplePatientEntryForm.SamplePatientEntry.class,
             SamplePatientEntryBatch.class })
     private String targetDiseaseProgramme;
@@ -399,6 +406,14 @@ public class PatientManagementInfo implements Serializable {
 
     public void setCustomNotes(String customNotes) {
         this.customNotes = customNotes;
+    }
+
+    public String getArtNumber() {
+        return artNumber;
+    }
+
+    public void setArtNumber(String artNumber) {
+        this.artNumber = artNumber == null ? null : artNumber.trim();
     }
 
     public String getTargetDiseaseProgramme() {
