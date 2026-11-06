@@ -5810,6 +5810,8 @@
   "patient.label.additionalInfo": "Additional Information",
   "patient.label.age": "Age",
   "patient.label.customNotes": "Custom Notes",
+  "patient.label.artNumber": "ART number",
+  "patient.validation.artNumberRequired": "ART number is required",
   "patient.label.diseaseProgramme": "Target Disease Programme",
   "patient.label.occupation": "Occupation",
   "patient.label.contactphone": "Contact Phone:{PHONE_FORMAT}",

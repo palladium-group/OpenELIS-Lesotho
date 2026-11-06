@@ -26,9 +26,14 @@ export const createPatientValidationSchema = (configurationProperties = {}) => {
       : Yup.string().required("patient.validation.nationalIdRequired");
   const sexRequired = configurationProperties.PATIENT_SEX_REQUIRED !== "false";
   const ageRequired = configurationProperties.PATIENT_AGE_REQUIRED !== "false";
+  const artNumberRequired =
+    configurationProperties.PATIENT_ART_NUMBER_REQUIRED === "true";
 
   return Yup.object().shape({
     nationalId: nationalIdValidator,
+    artNumber: artNumberRequired
+      ? Yup.string().required("patient.validation.artNumberRequired")
+      : Yup.string().nullable(),
     birthDateForDisplay: ageRequired
       ? Yup.string()
           .required("patient.validation.dobOrAgeRequired")

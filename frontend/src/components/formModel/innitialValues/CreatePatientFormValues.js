@@ -25,6 +25,7 @@ const CreatePatientFormValues = {
   otherNationality: "",
   occupation: "",
   customNotes: "",
+  artNumber: "",
   targetDiseaseProgramme: "",
   photo: "",
   idDocuments: [],
