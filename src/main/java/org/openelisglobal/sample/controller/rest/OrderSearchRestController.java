@@ -1534,6 +1534,44 @@ public class OrderSearchRestController extends BaseRestController {
         if (tbOrderReason != null) {
             sampleOrderItems.put("tbOrderReason", tbOrderReason);
         }
+        String tbPatientNumber = observationHistoryService.getValueForSample(ObservationType.TB_PATIENT_NUMBER,
+                sampleId);
+        if (tbPatientNumber != null) {
+            sampleOrderItems.put("tbPatientNumber", tbPatientNumber);
+        }
+        String tbSuspectNumber = observationHistoryService.getValueForSample(ObservationType.TB_SUSPECT_NUMBER,
+                sampleId);
+        if (tbSuspectNumber != null) {
+            sampleOrderItems.put("tbSuspectNumber", tbSuspectNumber);
+        }
+        String tbv0 = observationHistoryService.getValueForSample(ObservationType.TB_TEST_REQUEST, sampleId);
+        if (tbv0 != null) {
+            sampleOrderItems.put("tbTestRequest", tbv0);
+        }
+        String tbv1 = observationHistoryService.getValueForSample(ObservationType.TB_REFERRED_TO, sampleId);
+        if (tbv1 != null) {
+            sampleOrderItems.put("tbReferredTo", tbv1);
+        }
+        String tbv2 = observationHistoryService.getValueForSample(ObservationType.TB_SAMPLE_NUMBER, sampleId);
+        if (tbv2 != null) {
+            sampleOrderItems.put("tbSampleNumber", tbv2);
+        }
+        String tbv3 = observationHistoryService.getValueForSample(ObservationType.TB_CLINICAL_DETAILS, sampleId);
+        if (tbv3 != null) {
+            sampleOrderItems.put("tbClinicalDetails", tbv3);
+        }
+        String tbv4 = observationHistoryService.getValueForSample(ObservationType.TB_CLINICIAN_NAME, sampleId);
+        if (tbv4 != null) {
+            sampleOrderItems.put("tbClinicianName", tbv4);
+        }
+        String tbv5 = observationHistoryService.getValueForSample(ObservationType.TB_DATE_PROCESSED, sampleId);
+        if (tbv5 != null) {
+            sampleOrderItems.put("tbDateProcessed", tbv5);
+        }
+        String tbv6 = observationHistoryService.getValueForSample(ObservationType.TB_SIGNATURE, sampleId);
+        if (tbv6 != null) {
+            sampleOrderItems.put("tbSignature", tbv6);
+        }
 
         // Billing reference number
         String billingRef = observationHistoryService.getRawValueForSample(ObservationType.BILLING_REFERENCE_NUMBER,

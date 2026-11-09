@@ -59,5 +59,7 @@
   <include relativeToChangelogFile="true" file="027-patient-art-number.xml"/>
     <!-- TB purpose of request list -->
     <include relativeToChangelogFile="true" file="028-tb-order-reason-list.xml"/>
+    <include relativeToChangelogFile="true" file="029-tb-request-numbers.xml"/>
+    <include relativeToChangelogFile="true" file="031-tb-request-form-fields.xml"/>
 
 </databaseChangeLog>

@@ -350,6 +350,53 @@ const AddOrder = (props) => {
     });
   }
 
+  function handleTbPatientNumber(e) {
+    setOrderFormValues({
+      ...orderFormValues,
+      sampleOrderItems: {
+        ...orderFormValues.sampleOrderItems,
+        tbPatientNumber: e.target.value,
+      },
+    });
+  }
+
+  function handleTbSuspectNumber(e) {
+    setOrderFormValues({
+      ...orderFormValues,
+      sampleOrderItems: {
+        ...orderFormValues.sampleOrderItems,
+        tbSuspectNumber: e.target.value,
+      },
+    });
+  }
+
+  const TB_TEST_OPTIONS = [
+    { code: "SMEAR", label: "order.tb.test.smear" },
+    { code: "CULTURE_DST", label: "order.tb.test.cultureDst" },
+    { code: "LPA", label: "order.tb.test.lpa" },
+    { code: "GENEXPERT", label: "order.tb.test.genexpert" },
+  ];
+  const tbSelectedTests = (orderFormValues.sampleOrderItems.tbTestRequest ?? "")
+    .split(",")
+    .filter(Boolean);
+
+  function handleTbField(field, value) {
+    setOrderFormValues({
+      ...orderFormValues,
+      sampleOrderItems: {
+        ...orderFormValues.sampleOrderItems,
+        [field]: value,
+      },
+    });
+  }
+
+  function handleTbTest(code, checked) {
+    const next = checked
+      ? [...tbSelectedTests.filter((c) => c !== code), code]
+      : tbSelectedTests.filter((c) => c !== code);
+    handleTbField("tbTestRequest", next.join(","));
+  }
+
   function handleTbOrderReason(value) {
     setOrderFormValues({
       ...orderFormValues,
@@ -1605,6 +1652,46 @@ const AddOrder = (props) => {
               <FormattedMessage id="order.tb.heading" />
             </h3>
             <Grid fullWidth={true}>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbPatientNumberId"
+                  name="tbPatientNumber"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.patientNumber.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbPatientNumber ?? ""}
+                  onChange={handleTbPatientNumber}
+                />
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbSuspectNumberId"
+                  name="tbSuspectNumber"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.suspectNumber.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbSuspectNumber ?? ""}
+                  onChange={handleTbSuspectNumber}
+                />
+              </Column>
+              <Column lg={16} md={8} sm={4}>
+                <fieldset className="cds--fieldset">
+                  <legend className="cds--label">
+                    <FormattedMessage id="order.tb.testRequest.label" />
+                  </legend>
+                  {TB_TEST_OPTIONS.map((opt) => (
+                    <Checkbox
+                      key={opt.code}
+                      id={`tbTest-${opt.code}`}
+                      labelText={intl.formatMessage({ id: opt.label })}
+                      checked={tbSelectedTests.includes(opt.code)}
+                      onChange={(_event, { checked }) =>
+                        handleTbTest(opt.code, checked)
+                      }
+                    />
+                  ))}
+                </fieldset>
+              </Column>
               <Column lg={16} md={8} sm={4}>
                 <RadioButtonGroup
                   legendText={intl.formatMessage({
@@ -1626,6 +1713,90 @@ const AddOrder = (props) => {
                     />
                   ))}
                 </RadioButtonGroup>
+              </Column>
+              <Column lg={16} md={8} sm={4}>
+                <h4>
+                  <FormattedMessage id="order.tb.clinicalInfo.label" />
+                </h4>
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbReferredToId"
+                  name="tbReferredTo"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.referredTo.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbReferredTo ?? ""}
+                  onChange={(e) =>
+                    handleTbField("tbReferredTo", e.target.value)
+                  }
+                />
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbSampleNumberId"
+                  name="tbSampleNumber"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.sampleNumber.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbSampleNumber ?? ""}
+                  onChange={(e) =>
+                    handleTbField("tbSampleNumber", e.target.value)
+                  }
+                />
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbClinicianNameId"
+                  name="tbClinicianName"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.clinicianName.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbClinicianName ?? ""}
+                  onChange={(e) =>
+                    handleTbField("tbClinicianName", e.target.value)
+                  }
+                />
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbDateProcessedId"
+                  name="tbDateProcessed"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.dateProcessed.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbDateProcessed ?? ""}
+                  onChange={(e) =>
+                    handleTbField("tbDateProcessed", e.target.value)
+                  }
+                />
+              </Column>
+              <Column lg={16} md={8} sm={4}>
+                <TextArea
+                  id="tbClinicalDetailsId"
+                  name="tbClinicalDetails"
+                  rows={3}
+                  labelText={intl.formatMessage({
+                    id: "order.tb.clinicalDetails.label",
+                  })}
+                  value={
+                    orderFormValues.sampleOrderItems.tbClinicalDetails ?? ""
+                  }
+                  onChange={(e) =>
+                    handleTbField("tbClinicalDetails", e.target.value)
+                  }
+                />
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="tbSignatureId"
+                  name="tbSignature"
+                  labelText={intl.formatMessage({
+                    id: "order.tb.signature.label",
+                  })}
+                  value={orderFormValues.sampleOrderItems.tbSignature ?? ""}
+                  onChange={(e) => handleTbField("tbSignature", e.target.value)}
+                />
               </Column>
             </Grid>
           </div>

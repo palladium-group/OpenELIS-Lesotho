@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Lesotho TB request form: test request ticks and the clinical information box, saved with the order.
+         An observation whose type row is missing is dropped silently, so the types are seeded. -->
+    <changeSet id="031-tb-request-form-fields" author="tumisang">
+        <sql splitStatements="true" endDelimiter=";">
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbTestRequest', 'TB_TEST_REQUEST', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbTestRequest');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbReferredTo', 'TB_REFERRED_TO', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbReferredTo');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbSampleNumber', 'TB_SAMPLE_NUMBER', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbSampleNumber');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbClinicalDetails', 'TB_CLINICAL_DETAILS', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbClinicalDetails');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbClinicianName', 'TB_CLINICIAN_NAME', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbClinicianName');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbDateProcessed', 'TB_DATE_PROCESSED', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbDateProcessed');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbSignature', 'TB_SIGNATURE', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbSignature');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
