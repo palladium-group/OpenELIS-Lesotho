@@ -57,5 +57,7 @@
   <include file="liquibase/3.5.x.x/125-amr-v2-environmental-migration.xml"/>
   <!-- ART number: optional patient identifier (identity type + admin switches) -->
   <include relativeToChangelogFile="true" file="027-patient-art-number.xml"/>
+    <!-- TB purpose of request list -->
+    <include relativeToChangelogFile="true" file="028-tb-order-reason-list.xml"/>
 
 </databaseChangeLog>

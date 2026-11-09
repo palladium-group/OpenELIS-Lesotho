@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { RadioButtonGroup, RadioButton } from "@carbon/react";
 import {
   Button,
   Checkbox,
@@ -68,6 +69,16 @@ const AddOrder = (props) => {
   const [otherTestLocationCodeId, setOtherTestLocationCodeId] = useState("");
   const [providers, setProviders] = useState([]);
   const [paymentOptions, setPaymentOptions] = useState([]);
+  const [tbOrderReasons, setTbOrderReasons] = useState([]);
+
+  // Lesotho TB request form: "Purpose of request" options (dictionary list).
+  useEffect(() => {
+    getFromOpenElisServer("/rest/displayList/TB_ORDER_REASONS", (response) => {
+      if (Array.isArray(response)) {
+        setTbOrderReasons(response);
+      }
+    });
+  }, []);
   const [samplingPerformed, setSamplingPerformed] = useState([]);
   const [siteNames, setSiteNames] = useState([]);
   const [sampleTypeOptions, setSampleTypeOptions] = useState([]);
@@ -338,6 +349,24 @@ const AddOrder = (props) => {
       },
     });
   }
+
+  function handleTbOrderReason(value) {
+    setOrderFormValues({
+      ...orderFormValues,
+      sampleOrderItems: {
+        ...orderFormValues.sampleOrderItems,
+        tbOrderReason: value,
+      },
+    });
+  }
+
+  // The TB section appears only when a selected test looks like a TB test.
+  // To change what counts as TB, edit this pattern.
+  const TB_TEST_PATTERN =
+    /tubercul|\bmtb\b|xpert|rifampi|genexpert|line probe|\bafb\b/i;
+  const isTbOrder = (samples || []).some((s) =>
+    (s.tests || []).some((t) => TB_TEST_PATTERN.test(JSON.stringify(t))),
+  );
 
   function handleRequesterFax(e) {
     setOrderFormValues({
@@ -1570,6 +1599,37 @@ const AddOrder = (props) => {
             )}
           </Grid>
         </div>
+        {(isTbOrder || !!orderFormValues?.sampleOrderItems?.tbOrderReason) && (
+          <div className="orderLegendBody">
+            <h3>
+              <FormattedMessage id="order.tb.heading" />
+            </h3>
+            <Grid fullWidth={true}>
+              <Column lg={16} md={8} sm={4}>
+                <RadioButtonGroup
+                  legendText={intl.formatMessage({
+                    id: "order.tb.purpose.label",
+                  })}
+                  name="tbOrderReason"
+                  orientation="horizontal"
+                  valueSelected={
+                    orderFormValues.sampleOrderItems.tbOrderReason ?? ""
+                  }
+                  onChange={handleTbOrderReason}
+                >
+                  {tbOrderReasons.map((option) => (
+                    <RadioButton
+                      key={option.id}
+                      id={`tbOrderReason-${option.id}`}
+                      labelText={option.value}
+                      value={option.id}
+                    />
+                  ))}
+                </RadioButtonGroup>
+              </Column>
+            </Grid>
+          </div>
+        )}
         {!isModifyOrder && setStagedAttachments && (
           <div className="orderLegendBody">
             <h3>

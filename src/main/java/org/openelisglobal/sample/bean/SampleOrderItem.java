@@ -287,6 +287,8 @@ public class SampleOrderItem implements Serializable {
     private String contactTracingIndexName;
 
     private String provisionalClinicalDiagnosis;
+
+    private String tbOrderReason;
     private String contactTracingIndexRecordNumber;
 
     private QuestionnaireResponse additionalQuestions;
@@ -418,6 +420,14 @@ public class SampleOrderItem implements Serializable {
 
     public void setProvisionalClinicalDiagnosis(String provisionalClinicalDiagnosis) {
         this.provisionalClinicalDiagnosis = provisionalClinicalDiagnosis;
+    }
+
+    public String getTbOrderReason() {
+        return tbOrderReason;
+    }
+
+    public void setTbOrderReason(String tbOrderReason) {
+        this.tbOrderReason = tbOrderReason;
     }
 
     public void setOrderType(String orderType) {

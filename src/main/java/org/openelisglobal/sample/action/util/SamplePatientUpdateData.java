@@ -978,6 +978,9 @@ public class SamplePatientUpdateData {
                     ValueType.DICTIONARY);
         }
 
+        createClearableObservation(sampleOrder.getTbOrderReason(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_ORDER_REASON),
+                ValueType.DICTIONARY);
         createObservation(sampleOrder.getRequestDate(),
                 observationHistoryService.getObservationTypeIdForType(ObservationType.REQUEST_DATE), ValueType.LITERAL);
         createClearableObservation(sampleOrder.getNextVisitDate(),

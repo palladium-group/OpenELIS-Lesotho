@@ -1528,6 +1528,13 @@ public class OrderSearchRestController extends BaseRestController {
         sampleOrderItems.put("paymentOptions",
                 DisplayListService.getInstance().getList(ListType.SAMPLE_PATIENT_PAYMENT_OPTIONS));
 
+        // TB purpose of request (Diagnostic / Follow up)
+        String tbOrderReason = observationHistoryService.getRawValueForSample(ObservationType.TB_ORDER_REASON,
+                sampleId);
+        if (tbOrderReason != null) {
+            sampleOrderItems.put("tbOrderReason", tbOrderReason);
+        }
+
         // Billing reference number
         String billingRef = observationHistoryService.getRawValueForSample(ObservationType.BILLING_REFERENCE_NUMBER,
                 sampleId);

@@ -5440,6 +5440,8 @@
   "order.requester.lastName.label": "Requester's LastName:",
   "order.requester.phone.label": "Requester Phone:",
   "order.requester.provisionalDiagnosis.label": "Provisional Clinical Diagnosis:",
+  "order.tb.heading": "Tuberculosis request information",
+  "order.tb.purpose.label": "Purpose of request",
   "order.result.reporting.heading": "RESULT REPORTING",
   "order.sampleCategory": "Sample Category",
   "order.sampleCategory.helper": "Select the category of sample to collect",

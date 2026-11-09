@@ -170,6 +170,8 @@ public class SampleOrderService {
                     observationHistoryService.getValueForSample(ObservationType.NEXT_VISIT_DATE, sample.getId()));
             sampleOrder.setPaymentOptionSelection(
                     observationHistoryService.getRawValueForSample(ObservationType.PAYMENT_STATUS, sample.getId()));
+            sampleOrder.setTbOrderReason(
+                    observationHistoryService.getRawValueForSample(ObservationType.TB_ORDER_REASON, sample.getId()));
             sampleOrder.setTestLocationCode(
                     observationHistoryService.getRawValueForSample(ObservationType.TEST_LOCATION_CODE, sample.getId()));
             sampleOrder.setOtherLocationCode(observationHistoryService
@@ -405,6 +407,8 @@ public class SampleOrderService {
                 sampleOrder.getOtherLocationCode(), ValueType.LITERAL);
         createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.PAYMENT_STATUS,
                 sampleOrder.getPaymentOptionSelection(), ValueType.DICTIONARY);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_ORDER_REASON,
+                sampleOrder.getTbOrderReason(), ValueType.DICTIONARY);
         createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.REQUEST_DATE,
                 sampleOrder.getRequestDate(), ValueType.LITERAL);
         createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.PROGRAM,
