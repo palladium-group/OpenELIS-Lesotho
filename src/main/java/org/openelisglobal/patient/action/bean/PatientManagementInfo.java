@@ -170,6 +170,12 @@ public class PatientManagementInfo implements Serializable {
             SamplePatientEntryBatch.class })
     private String customNotes;
 
+    // LESOTHO: passport number, stored as the PASSPORT patient identity
+    @SafeHtml(level = SafeHtml.SafeListLevel.NONE, groups = { SamplePatientEntryForm.SamplePatientEntry.class,
+            SamplePatientEntryBatch.class })
+    @Size(max = 50, groups = { SamplePatientEntryForm.SamplePatientEntry.class, SamplePatientEntryBatch.class })
+    private String passportNumber;
+
     @SafeHtml(level = SafeHtml.SafeListLevel.NONE, groups = { SamplePatientEntryForm.SamplePatientEntry.class,
             SamplePatientEntryBatch.class })
     private String targetDiseaseProgramme;
@@ -399,6 +405,14 @@ public class PatientManagementInfo implements Serializable {
 
     public void setCustomNotes(String customNotes) {
         this.customNotes = customNotes;
+    }
+
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
     }
 
     public String getTargetDiseaseProgramme() {

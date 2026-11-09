@@ -1262,6 +1262,7 @@ public class OrderSearchRestController extends BaseRestController {
         patientInfo.setInsuranceNumber(identityMap.getIdentityValue(identityList, "INSURANCE"));
         patientInfo.setOccupation(identityMap.getIdentityValue(identityList, "OCCUPATION"));
         patientInfo.setCustomNotes(identityMap.getIdentityValue(identityList, "CUSTOM_NOTES"));
+        patientInfo.setPassportNumber(identityMap.getIdentityValue(identityList, "PASSPORT")); // LESOTHO
         patientInfo.setTargetDiseaseProgramme(identityMap.getIdentityValue(identityList, "DISEASE_PROGRAMME"));
 
         String format1 = "dd/MM/yyyy";

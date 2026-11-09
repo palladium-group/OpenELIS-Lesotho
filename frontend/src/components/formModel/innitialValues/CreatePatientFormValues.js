@@ -25,6 +25,7 @@ const CreatePatientFormValues = {
   otherNationality: "",
   occupation: "",
   customNotes: "",
+  passportNumber: "", // LESOTHO
   targetDiseaseProgramme: "",
   photo: "",
   idDocuments: [],

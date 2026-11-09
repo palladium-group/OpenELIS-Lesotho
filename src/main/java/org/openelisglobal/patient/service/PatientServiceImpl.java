@@ -714,6 +714,7 @@ public class PatientServiceImpl extends AuditableBaseObjectServiceImpl<Patient, 
         persistIdentityType(patientInfo.getInsuranceNumber(), "INSURANCE", patientInfo, patient, sysUserId);
         persistIdentityType(patientInfo.getOccupation(), "OCCUPATION", patientInfo, patient, sysUserId);
         persistIdentityType(patientInfo.getCustomNotes(), "CUSTOM_NOTES", patientInfo, patient, sysUserId);
+        persistIdentityType(patientInfo.getPassportNumber(), "PASSPORT", patientInfo, patient, sysUserId); // LESOTHO
         persistIdentityType(patientInfo.getTargetDiseaseProgramme(), "DISEASE_PROGRAMME", patientInfo, patient,
                 sysUserId);
         persistIdentityType(patientInfo.getSubjectNumber(), "SUBJECT", patientInfo, patient, sysUserId);
