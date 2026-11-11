@@ -978,6 +978,35 @@ public class SamplePatientUpdateData {
                     ValueType.DICTIONARY);
         }
 
+        createClearableObservation(sampleOrder.getTbOrderReason(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_ORDER_REASON),
+                ValueType.DICTIONARY);
+        createClearableObservation(sampleOrder.getTbPatientNumber(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_PATIENT_NUMBER),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbSuspectNumber(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_SUSPECT_NUMBER),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbTestRequest(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_TEST_REQUEST),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbReferredTo(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_REFERRED_TO),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbSampleNumber(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_SAMPLE_NUMBER),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbClinicalDetails(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_CLINICAL_DETAILS),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbClinicianName(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_CLINICIAN_NAME),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbDateProcessed(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_DATE_PROCESSED),
+                ValueType.LITERAL);
+        createClearableObservation(sampleOrder.getTbSignature(),
+                observationHistoryService.getObservationTypeIdForType(ObservationType.TB_SIGNATURE), ValueType.LITERAL);
         createObservation(sampleOrder.getRequestDate(),
                 observationHistoryService.getObservationTypeIdForType(ObservationType.REQUEST_DATE), ValueType.LITERAL);
         createClearableObservation(sampleOrder.getNextVisitDate(),

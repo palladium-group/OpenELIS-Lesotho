@@ -323,6 +323,8 @@ public class DefaultConfigurationProperties extends ConfigurationProperties {
         properties.setPropertyValue(Property.PATIENT_NATIONAL_ID_REQUIRED, "true");
         properties.setPropertyValue(Property.PATIENT_SEX_REQUIRED, "true");
         properties.setPropertyValue(Property.PATIENT_AGE_REQUIRED, "true");
+        properties.setPropertyValue(Property.PATIENT_ART_NUMBER_SHOWN, "false");
+        properties.setPropertyValue(Property.PATIENT_ART_NUMBER_REQUIRED, "false");
 
         properties.setPropertyValue(Property.QA_SAMPLE_ID_REQUIRED, "false");
         properties.setPropertyValue(Property.MAX_ORDER_LABEL_PRINTED, "10");
@@ -332,6 +334,7 @@ public class DefaultConfigurationProperties extends ConfigurationProperties {
         properties.setPropertyValue(Property.MAX_BLOCK_LABEL_PRINTED, "1");
         properties.setPropertyValue(Property.MAX_FREEZER_LABEL_PRINTED, "1");
         properties.setPropertyValue(Property.MAX_REQUEST_LABEL_QUANTITY, "100");
+        properties.setPropertyValue(Property.MAX_REQUEST_LABEL_TOTAL, "1000");
         properties.setPropertyValue(Property.DEFAULT_ORDER_LABEL_PRINTED, "2");
         properties.setPropertyValue(Property.DEFAULT_SPECIMEN_LABEL_PRINTED, "1");
         properties.setPropertyValue(Property.DEFAULT_ALIQUOT_LABEL_PRINTED, "1");

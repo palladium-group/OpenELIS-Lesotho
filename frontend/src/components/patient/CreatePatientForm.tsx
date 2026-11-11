@@ -228,6 +228,12 @@ function CreatePatientForm(props: CreatePatientFormProps) {
     configurationProperties.PATIENT_SEX_REQUIRED !== "false";
   const patientAgeRequired =
     configurationProperties.PATIENT_AGE_REQUIRED !== "false";
+  const artNumberRequired = configIsTrue(
+    configurationProperties.PATIENT_ART_NUMBER_REQUIRED,
+  );
+  const artNumberShown =
+    artNumberRequired ||
+    configIsTrue(configurationProperties.PATIENT_ART_NUMBER_SHOWN);
   const aliasEnabled = configIsTrue(
     configurationProperties.PATIENT_ALIAS_ENABLED,
   );
@@ -978,6 +984,8 @@ function CreatePatientForm(props: CreatePatientFormProps) {
                     {" "}
                     <br></br>
                   </Column>
+                  {/* "Add Photo" hidden for the Lesotho deployment. To restore,
+                      remove this comment wrapper.
                   <Column lg={16} md={8} sm={4}>
                     <PatientImageSelector
                       value={values.photo}
@@ -988,6 +996,7 @@ function CreatePatientForm(props: CreatePatientFormProps) {
                       disabled={!!props.disabled || isReadOnly}
                     />
                   </Column>
+                  */}
                   <Column lg={8} md={4} sm={4}>
                     <Field name="subjectNumber">
                       {({ field }) => (
@@ -1018,6 +1027,32 @@ function CreatePatientForm(props: CreatePatientFormProps) {
                       )}
                     </Field>
                   </Column>
+                  {artNumberShown && (
+                    <Column lg={8} md={4} sm={4}>
+                      <Field name="artNumber">
+                        {({ field }) => (
+                          <TextInput
+                            value={values.artNumber || ""}
+                            name={field.name}
+                            labelText={
+                              <>
+                                {intl.formatMessage({
+                                  id: "patient.label.artNumber",
+                                })}
+                                <RequiredMarker required={artNumberRequired} />
+                              </>
+                            }
+                            {...requiredProps(artNumberRequired)}
+                            id={field.name}
+                            invalid={Boolean(
+                              errors.artNumber && touched.artNumber,
+                            )}
+                            invalidText={validationText(errors.artNumber)}
+                          />
+                        )}
+                      </Field>
+                    </Column>
+                  )}
                   <Column lg={8} md={4} sm={4}>
                     <Field name="nationalId">
                       {({ field }) => (

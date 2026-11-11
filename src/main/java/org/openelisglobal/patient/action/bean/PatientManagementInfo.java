@@ -175,6 +175,12 @@ public class PatientManagementInfo implements Serializable {
             SamplePatientEntryBatch.class })
     @Size(max = 50, groups = { SamplePatientEntryForm.SamplePatientEntry.class, SamplePatientEntryBatch.class })
     private String passportNumber;
+    @OptionalNotBlank(properties = { Property.PATIENT_ART_NUMBER_REQUIRED }, groups = {
+            SamplePatientEntryForm.SamplePatientEntry.class })
+    @Pattern(regexp = ValidationHelper.PATIENT_ID_REGEX, groups = { SamplePatientEntryForm.SamplePatientEntry.class,
+            SamplePatientEntryBatch.class })
+    @Size(max = 255)
+    private String artNumber;
 
     @SafeHtml(level = SafeHtml.SafeListLevel.NONE, groups = { SamplePatientEntryForm.SamplePatientEntry.class,
             SamplePatientEntryBatch.class })
@@ -413,6 +419,12 @@ public class PatientManagementInfo implements Serializable {
 
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
+    public String getArtNumber() {
+        return artNumber;
+    }
+
+    public void setArtNumber(String artNumber) {
+        this.artNumber = artNumber == null ? null : artNumber.trim();
     }
 
     public String getTargetDiseaseProgramme() {

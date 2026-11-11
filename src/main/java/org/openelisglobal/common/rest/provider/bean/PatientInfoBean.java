@@ -45,6 +45,7 @@ public class PatientInfoBean implements Serializable {
     private String occupation;
     private String customNotes;
     private String passportNumber; // LESOTHO
+    private String artNumber;
     private String targetDiseaseProgramme;
     private String primaryPhone;
     private String email;
@@ -253,6 +254,12 @@ public class PatientInfoBean implements Serializable {
 
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
+    public String getArtNumber() {
+        return artNumber;
+    }
+
+    public void setArtNumber(String artNumber) {
+        this.artNumber = artNumber;
     }
 
     public String getTargetDiseaseProgramme() {

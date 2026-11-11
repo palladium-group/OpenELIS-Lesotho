@@ -206,6 +206,8 @@ public abstract class ConfigurationProperties {
                                                                       // patient
         PATIENT_SEX_REQUIRED("Patient sex required", "text"), // True if patient sex is required for new patient
         PATIENT_AGE_REQUIRED("Patient age required", "text"), // True if patient age/DOB is required for new patient
+        PATIENT_ART_NUMBER_SHOWN("ART number shown", "text"), // True if the ART number field is shown
+        PATIENT_ART_NUMBER_REQUIRED("ART number required", "text"), // True if the ART number is required
         QA_SAMPLE_ID_REQUIRED("sample id required", "text"), // True if sample id required from referring lab
 
         MAX_ORDER_LABEL_PRINTED("numMaxOrderLabels", "text"), // Max order labels that can be printed
@@ -214,9 +216,10 @@ public abstract class ConfigurationProperties {
         MAX_SLIDE_LABEL_PRINTED("numMaxSlideLabels", "text"), // Max slides that can be printed
         MAX_BLOCK_LABEL_PRINTED("numMaxBlockLabels", "text"), // Max block labels that can be printed
         MAX_FREEZER_LABEL_PRINTED("numMaxFreezerLabels", "text"), // Max freezer labels that can be printed
-        MAX_REQUEST_LABEL_QUANTITY("numMaxRequestLabelQuantity", "text"), // Hard upper bound on the per-request
-        // quantity parameter, applied even when override=true (defends against
-        // unbounded PDF render loops)
+        // Per-quantity safety bound, applied even when override=true.
+        MAX_REQUEST_LABEL_QUANTITY("numMaxRequestLabelQuantity", "text"),
+        // Total copies in one PDF, including all sets/specimens.
+        MAX_REQUEST_LABEL_TOTAL("numMaxRequestLabelTotal", "text"),
         DEFAULT_ORDER_LABEL_PRINTED("numDefaultOrderLabels", "text"), // Max order labels that can be printed
         DEFAULT_SPECIMEN_LABEL_PRINTED("numDefaultSpecimenLabels", "text"), // Max specimen labels that can be printed
         DEFAULT_ALIQUOT_LABEL_PRINTED("numDefaultAliquotLabels", "text"), // Max aliquots that can be printed
@@ -335,6 +338,9 @@ public abstract class ConfigurationProperties {
         // OGC-1147: does an open QC failure block release, or only warn
         QC_FAIL_BLOCKS_VALIDATION("qcFailBlocksValidation", "text"),
         BLOCK_SELF_VALIDATION("blockSelfValidation", "text"),
+        // OGC-1364: when true the validation policy decides which results wait
+        // for review instead of ALWAYS_VALIDATE_RESULTS.
+        USE_MULTI_LEVEL_VALIDATION("useMultiLevelValidation", "text"),
 
         // FR-2.3: per-deployment switches for the optional pathology bench
         // stages. The mandatory stages (ACCESSIONED, GROSSING, READY_PATHOLOGIST,

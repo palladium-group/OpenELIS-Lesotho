@@ -287,6 +287,26 @@ public class SampleOrderItem implements Serializable {
     private String contactTracingIndexName;
 
     private String provisionalClinicalDiagnosis;
+
+    private String tbOrderReason;
+
+    private String tbPatientNumber;
+
+    private String tbSuspectNumber;
+
+    private String tbTestRequest;
+
+    private String tbReferredTo;
+
+    private String tbSampleNumber;
+
+    private String tbClinicalDetails;
+
+    private String tbClinicianName;
+
+    private String tbDateProcessed;
+
+    private String tbSignature;
     private String contactTracingIndexRecordNumber;
 
     private QuestionnaireResponse additionalQuestions;
@@ -418,6 +438,86 @@ public class SampleOrderItem implements Serializable {
 
     public void setProvisionalClinicalDiagnosis(String provisionalClinicalDiagnosis) {
         this.provisionalClinicalDiagnosis = provisionalClinicalDiagnosis;
+    }
+
+    public String getTbOrderReason() {
+        return tbOrderReason;
+    }
+
+    public void setTbOrderReason(String tbOrderReason) {
+        this.tbOrderReason = tbOrderReason;
+    }
+
+    public String getTbPatientNumber() {
+        return tbPatientNumber;
+    }
+
+    public void setTbPatientNumber(String tbPatientNumber) {
+        this.tbPatientNumber = tbPatientNumber;
+    }
+
+    public String getTbSuspectNumber() {
+        return tbSuspectNumber;
+    }
+
+    public void setTbSuspectNumber(String tbSuspectNumber) {
+        this.tbSuspectNumber = tbSuspectNumber;
+    }
+
+    public String getTbTestRequest() {
+        return tbTestRequest;
+    }
+
+    public void setTbTestRequest(String tbTestRequest) {
+        this.tbTestRequest = tbTestRequest;
+    }
+
+    public String getTbReferredTo() {
+        return tbReferredTo;
+    }
+
+    public void setTbReferredTo(String tbReferredTo) {
+        this.tbReferredTo = tbReferredTo;
+    }
+
+    public String getTbSampleNumber() {
+        return tbSampleNumber;
+    }
+
+    public void setTbSampleNumber(String tbSampleNumber) {
+        this.tbSampleNumber = tbSampleNumber;
+    }
+
+    public String getTbClinicalDetails() {
+        return tbClinicalDetails;
+    }
+
+    public void setTbClinicalDetails(String tbClinicalDetails) {
+        this.tbClinicalDetails = tbClinicalDetails;
+    }
+
+    public String getTbClinicianName() {
+        return tbClinicianName;
+    }
+
+    public void setTbClinicianName(String tbClinicianName) {
+        this.tbClinicianName = tbClinicianName;
+    }
+
+    public String getTbDateProcessed() {
+        return tbDateProcessed;
+    }
+
+    public void setTbDateProcessed(String tbDateProcessed) {
+        this.tbDateProcessed = tbDateProcessed;
+    }
+
+    public String getTbSignature() {
+        return tbSignature;
+    }
+
+    public void setTbSignature(String tbSignature) {
+        this.tbSignature = tbSignature;
     }
 
     public void setOrderType(String orderType) {

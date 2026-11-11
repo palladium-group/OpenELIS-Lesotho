@@ -150,6 +150,7 @@ public class PatientSearchPopulateRestController {
         patientInfo.setOccupation(identityMap.getIdentityValue(identityList, "OCCUPATION"));
         patientInfo.setCustomNotes(identityMap.getIdentityValue(identityList, "CUSTOM_NOTES"));
         patientInfo.setPassportNumber(identityMap.getIdentityValue(identityList, "PASSPORT")); // LESOTHO
+        patientInfo.setArtNumber(identityMap.getIdentityValue(identityList, "ART"));
         patientInfo.setTargetDiseaseProgramme(identityMap.getIdentityValue(identityList, "DISEASE_PROGRAMME"));
         String format1 = "dd/MM/yyyy";
         String format2 = "MM/dd/yyyy";

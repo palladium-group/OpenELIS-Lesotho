@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- ART number: optional patient identifier. Hidden and optional by default,
+         so existing sites behave exactly as before. -->
+
+    <changeSet author="tumisang" id="patient-art-number-1-identity-type">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from clinlims.patient_identity_type where identity_type = 'ART';
+            </sqlCheck>
+        </preConditions>
+        <comment>Identity type for the patient's ART number.</comment>
+        <insert tableName="patient_identity_type" schemaName="clinlims">
+            <column name="id" valueSequenceNext="patient_identity_type_seq"/>
+            <column name="identity_type" value="ART"/>
+            <column name="description" value="ART number"/>
+            <column name="lastupdated" valueComputed="${now}"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="tumisang" id="patient-art-number-2-shown">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM clinlims.site_information WHERE name = 'ART number shown'
+            </sqlCheck>
+        </preConditions>
+        <comment>Admin switch: show the ART number field on patient forms</comment>
+        <insert schemaName="clinlims" tableName="site_information">
+            <column name="id" valueSequenceNext="site_information_seq" />
+            <column name="name" value="ART number shown" />
+            <column name="lastupdated" valueComputed="${now}" />
+            <column name="description" value="If true, an ART number field is shown on the patient forms" />
+            <column name="value" value="false" />
+            <column name="encrypted" value="false" />
+            <column name="domain_id" valueComputed="(SELECT id FROM site_information_domain WHERE name = 'patientEntryConfig')" />
+            <column name="value_type" value="boolean" />
+            <column name="instruction_key" value="instructions.patient.art.number.shown" />
+            <column name="group" value="0" />
+        </insert>
+    </changeSet>
+
+    <changeSet author="tumisang" id="patient-art-number-3-required">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM clinlims.site_information WHERE name = 'ART number required'
+            </sqlCheck>
+        </preConditions>
+        <comment>Admin switch: make the ART number required</comment>
+        <insert schemaName="clinlims" tableName="site_information">
+            <column name="id" valueSequenceNext="site_information_seq" />
+            <column name="name" value="ART number required" />
+            <column name="lastupdated" valueComputed="${now}" />
+            <column name="description" value="If true, the ART number is required when a patient is created or edited" />
+            <column name="value" value="false" />
+            <column name="encrypted" value="false" />
+            <column name="domain_id" valueComputed="(SELECT id FROM site_information_domain WHERE name = 'patientEntryConfig')" />
+            <column name="value_type" value="boolean" />
+            <column name="instruction_key" value="instructions.patient.art.number.required" />
+            <column name="group" value="0" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>
