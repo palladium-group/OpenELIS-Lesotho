@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Lesotho TB request form: "Purpose of request" is Diagnostic or Follow up.
+         The list lives in the dictionary category "TB Order Reasons", which DisplayListService
+         already reads for ListType.TB_ORDER_REASONS. Every insert is guarded, so re-running is harmless. -->
+    <changeSet id="028-tb-order-reason-list" author="tumisang">
+        <sql splitStatements="true" endDelimiter=";">
+INSERT INTO clinlims.dictionary_category (id, name, description, local_abbrev, lastupdated)
+SELECT nextval('clinlims.dictionary_category_seq'), 'TB Order Reasons', 'TB Order Reasons', 'TBORDER', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.dictionary_category WHERE description = 'TB Order Reasons');
+INSERT INTO clinlims.dictionary (id, is_active, dict_entry, lastupdated, local_abbrev, dictionary_category_id, sort_order)
+SELECT nextval('clinlims.dictionary_seq'), 'Y', 'Diagnostic', now(), 'Diagnostic', c.id, 10
+FROM clinlims.dictionary_category c WHERE c.description = 'TB Order Reasons'
+AND NOT EXISTS (SELECT 1 FROM clinlims.dictionary d WHERE d.dictionary_category_id = c.id AND d.dict_entry = 'Diagnostic');
+INSERT INTO clinlims.dictionary (id, is_active, dict_entry, lastupdated, local_abbrev, dictionary_category_id, sort_order)
+SELECT nextval('clinlims.dictionary_seq'), 'Y', 'Follow up', now(), 'Follow up', c.id, 20
+FROM clinlims.dictionary_category c WHERE c.description = 'TB Order Reasons'
+AND NOT EXISTS (SELECT 1 FROM clinlims.dictionary d WHERE d.dictionary_category_id = c.id AND d.dict_entry = 'Follow up');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

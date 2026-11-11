@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Lesotho TB request form: patient TB number and suspect number, saved with the order.
+         An observation whose type row is missing is dropped silently, so the types are seeded. -->
+    <changeSet id="029-tb-request-numbers" author="tumisang">
+        <sql splitStatements="true" endDelimiter=";">
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbPatientNumber', 'TB_PATIENT_NUMBER', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbPatientNumber');
+INSERT INTO clinlims.observation_history_type (id, type_name, description, lastupdated)
+SELECT nextval('clinlims.observation_history_type_seq'), 'TbSuspectNumber', 'TB_SUSPECT_NUMBER', now()
+WHERE NOT EXISTS (SELECT 1 FROM clinlims.observation_history_type WHERE type_name = 'TbSuspectNumber');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

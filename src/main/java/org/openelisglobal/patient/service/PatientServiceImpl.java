@@ -14,6 +14,8 @@ import org.openelisglobal.address.valueholder.PersonAddress;
 import org.openelisglobal.common.exception.LIMSRuntimeException;
 import org.openelisglobal.common.log.LogEvent;
 import org.openelisglobal.common.service.AuditableBaseObjectServiceImpl;
+import org.openelisglobal.common.util.ConfigurationProperties;
+import org.openelisglobal.common.util.ConfigurationProperties.Property;
 import org.openelisglobal.common.util.DateUtil;
 import org.openelisglobal.common.util.validator.GenericValidator;
 import org.openelisglobal.dataexchange.fhir.service.FhirPersistanceService;
@@ -714,6 +716,13 @@ public class PatientServiceImpl extends AuditableBaseObjectServiceImpl<Patient, 
         persistIdentityType(patientInfo.getInsuranceNumber(), "INSURANCE", patientInfo, patient, sysUserId);
         persistIdentityType(patientInfo.getOccupation(), "OCCUPATION", patientInfo, patient, sysUserId);
         persistIdentityType(patientInfo.getCustomNotes(), "CUSTOM_NOTES", patientInfo, patient, sysUserId);
+        // Only while the field is on the form: a hidden field sends nothing and saving
+        // would wipe a stored value.
+        if (ConfigurationProperties.getInstance().isPropertyValueEqual(Property.PATIENT_ART_NUMBER_SHOWN, "true")
+                || ConfigurationProperties.getInstance().isPropertyValueEqual(Property.PATIENT_ART_NUMBER_REQUIRED,
+                        "true")) {
+            persistIdentityType(patientInfo.getArtNumber(), "ART", patientInfo, patient, sysUserId);
+        }
         persistIdentityType(patientInfo.getTargetDiseaseProgramme(), "DISEASE_PROGRAMME", patientInfo, patient,
                 sysUserId);
         persistIdentityType(patientInfo.getSubjectNumber(), "SUBJECT", patientInfo, patient, sysUserId);

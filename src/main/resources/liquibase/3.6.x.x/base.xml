@@ -60,4 +60,11 @@
   <include relativeToChangelogFile="true" file="014-microbiology-case-result-entry.xml"/>
   <!-- M8 consumes the case structure and site routing above, including on fresh installs. -->
   <include file="liquibase/3.5.x.x/125-amr-v2-environmental-migration.xml"/>
+  <!-- ART number: optional patient identifier (identity type + admin switches) -->
+  <include relativeToChangelogFile="true" file="027-patient-art-number.xml"/>
+    <!-- TB purpose of request list -->
+    <include relativeToChangelogFile="true" file="028-tb-order-reason-list.xml"/>
+    <include relativeToChangelogFile="true" file="029-tb-request-numbers.xml"/>
+    <include relativeToChangelogFile="true" file="031-tb-request-form-fields.xml"/>
+
 </databaseChangeLog>
