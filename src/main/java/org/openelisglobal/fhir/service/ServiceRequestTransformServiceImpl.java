@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Group;
 import org.hl7.fhir.r4.model.Group.GroupType;
 import org.hl7.fhir.r4.model.Identifier;
@@ -21,6 +22,7 @@ import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.ServiceRequest.ServiceRequestIntent;
 import org.hl7.fhir.r4.model.ServiceRequest.ServiceRequestPriority;
 import org.hl7.fhir.r4.model.ServiceRequest.ServiceRequestStatus;
+import org.hl7.fhir.r4.model.StringType;
 import org.openelisglobal.analysis.service.AnalysisAnchorService;
 import org.openelisglobal.analysis.service.AnalysisService;
 import org.openelisglobal.analysis.valueholder.Analysis;
@@ -280,8 +282,72 @@ public class ServiceRequestTransformServiceImpl implements ServiceRequestTransfo
             serviceRequest
                     .setRequester(common.createReferenceFor(ResourceType.Practitioner, provider.getFhirUuidAsString()));
         }
+        addRequestFormDetails(serviceRequest, sample);
 
         return serviceRequest;
+    }
+
+    /**
+     * The Lesotho request-form details entered on the order screen (TB and
+     * cervical cytology sections). The purpose of a TB request is the order's
+     * reasonCode; the others have no ServiceRequest element of their own and are
+     * published as extensions named {oeFhirSystem}/order_{field}.
+     */
+    private void addRequestFormDetails(ServiceRequest serviceRequest, Sample sample) {
+        String tbOrderReason = requestFormValue(sample, ObservationType.TB_ORDER_REASON);
+        if (tbOrderReason != null) {
+            serviceRequest.addReasonCode(new CodeableConcept()
+                    .addCoding(new Coding(fhirConfig.getOeFhirSystem() + "/tb_order_reason", tbOrderReason,
+                            tbOrderReason))
+                    .setText(tbOrderReason));
+        }
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_PATIENT_NUMBER, "tbPatientNumber");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_SUSPECT_NUMBER, "tbSuspectNumber");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_TEST_REQUEST, "tbTestRequest");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_REFERRED_TO, "tbReferredTo");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_SAMPLE_NUMBER, "tbSampleNumber");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_CLINICAL_DETAILS, "tbClinicalDetails");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_CLINICIAN_NAME, "tbClinicianName");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_DATE_PROCESSED, "tbDateProcessed");
+        addRequestFormExtension(serviceRequest, sample, ObservationType.TB_SIGNATURE, "tbSignature");
+    }
+
+    private void addRequestFormExtension(ServiceRequest serviceRequest, Sample sample, ObservationType type,
+            String name) {
+        String value = requestFormValue(sample, type);
+        if (value != null) {
+            serviceRequest.addExtension(
+                    new Extension(fhirConfig.getOeFhirSystem() + "/order_" + name, new StringType(value)));
+        }
+    }
+
+    /**
+     * The stored value of one request-form field for the order, with a dictionary
+     * answer given as its text. Null when the field was left empty or cannot be
+     * read, so a missing field never stops the order being published.
+     */
+    private String requestFormValue(Sample sample, ObservationType type) {
+        try {
+            var typeId = observationHistoryService.getObservationTypeIdForType(type);
+            if (typeId == null) {
+                return null;
+            }
+            ObservationHistory history = observationHistoryService
+                    .getObservationHistoriesBySampleIdAndType(sample.getId(), typeId);
+            if (history == null || GenericValidator.isBlankOrNull(history.getValue())) {
+                return null;
+            }
+            if ("D".equals(history.getValueType())) {
+                Dictionary dictionary = dictionaryService.get(history.getValue());
+                return dictionary == null || GenericValidator.isBlankOrNull(dictionary.getDictEntry()) ? null
+                        : dictionary.getDictEntry();
+            }
+            return history.getValue();
+        } catch (RuntimeException e) {
+            LogEvent.logWarn(this.getClass().getSimpleName(), "requestFormValue",
+                    "could not read " + type + " for sample " + sample.getId() + ": " + e.getMessage());
+            return null;
+        }
     }
 
     /**
