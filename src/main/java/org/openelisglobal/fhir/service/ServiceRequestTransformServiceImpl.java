@@ -288,17 +288,17 @@ public class ServiceRequestTransformServiceImpl implements ServiceRequestTransfo
     }
 
     /**
-     * The Lesotho request-form details entered on the order screen (TB and
-     * cervical cytology sections). The purpose of a TB request is the order's
-     * reasonCode; the others have no ServiceRequest element of their own and are
-     * published as extensions named {oeFhirSystem}/order_{field}.
+     * The Lesotho request-form details entered on the order screen (TB and cervical
+     * cytology sections). The purpose of a TB request is the order's reasonCode;
+     * the others have no ServiceRequest element of their own and are published as
+     * extensions named {oeFhirSystem}/order_{field}.
      */
     private void addRequestFormDetails(ServiceRequest serviceRequest, Sample sample) {
         String tbOrderReason = requestFormValue(sample, ObservationType.TB_ORDER_REASON);
         if (tbOrderReason != null) {
             serviceRequest.addReasonCode(new CodeableConcept()
-                    .addCoding(new Coding(fhirConfig.getOeFhirSystem() + "/tb_order_reason", tbOrderReason,
-                            tbOrderReason))
+                    .addCoding(
+                            new Coding(fhirConfig.getOeFhirSystem() + "/tb_order_reason", tbOrderReason, tbOrderReason))
                     .setText(tbOrderReason));
         }
         addRequestFormExtension(serviceRequest, sample, ObservationType.TB_PATIENT_NUMBER, "tbPatientNumber");
