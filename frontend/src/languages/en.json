@@ -14879,7 +14879,7 @@
   "lesotho.clinicalInfo.everBreastfed": "Was the baby ever breastfed?",
   "lesotho.clinicalInfo.breastfeedingNow": "Is the baby breastfeeding now?",
   "lesotho.clinicalInfo.lastBreastfeedDate": "Date of last breastfeed",
-  "lesotho.clinicalInfo.saveFailed": "The order was saved, but its clinical information could not be saved."
+  "lesotho.clinicalInfo.saveFailed": "The order was saved, but its clinical information could not be saved.",
   "eqa.entry.validated": "Validated",
   "eqa.cycle.new.noUsableEnrollments": "No active enrollment here matches a scheme on this instance. Enrollments are managed under My EQA Schemes, schemes under EQA Management, Schemes.",
   "eqa.cycle.autoSubmit.noChannel": "This site has no automatic channel to the provider, so submit by hand.",

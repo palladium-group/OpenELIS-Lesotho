@@ -254,6 +254,8 @@ public class PatientInfoBean implements Serializable {
 
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
+    }
+
     public String getArtNumber() {
         return artNumber;
     }

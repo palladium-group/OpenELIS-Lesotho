@@ -419,6 +419,8 @@ public class PatientManagementInfo implements Serializable {
 
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
+    }
+
     public String getArtNumber() {
         return artNumber;
     }

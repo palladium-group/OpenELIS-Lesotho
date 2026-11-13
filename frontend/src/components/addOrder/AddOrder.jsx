@@ -1679,6 +1679,8 @@ const AddOrder = (props) => {
               patientSex={orderFormValues?.patientProperties?.gender}
               onChange={setClinicalInformation}
             />
+          </div>
+        )}
         {(isTbOrder || !!orderFormValues?.sampleOrderItems?.tbOrderReason) && (
           <div className="orderLegendBody">
             <h3>
