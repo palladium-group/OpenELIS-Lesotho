@@ -149,6 +149,12 @@ public class PatientTransformServiceImpl implements PatientTransformService {
         fhirPatient.setId(uuid);
         fhirPatient.getMeta().setLastUpdated(patient.getLastupdated());
         fhirPatient.setIdentifier(createPatientIdentifiers(subjectNumber, nationalId, stNumber, guid, uuid));
+        String artNumber = PatientIdentityTypeMap.getInstance()
+                .getIdentityValue(patientIdentityService.getPatientIdentitiesForPatient(patient.getId()), "ART");
+        if (!GenericValidator.isBlankOrNull(artNumber)) {
+            fhirPatient
+                    .addIdentifier(common.createIdentifier(fhirConfig.getOeFhirSystem() + "/pat_artNumber", artNumber));
+        }
         Identifier facilityId = common.createFacilityIdentifier();
         if (facilityId != null) {
             fhirPatient.addIdentifier(facilityId);

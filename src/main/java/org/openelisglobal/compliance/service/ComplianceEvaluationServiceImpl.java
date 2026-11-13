@@ -3,7 +3,9 @@ package org.openelisglobal.compliance.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -20,6 +22,7 @@ import org.openelisglobal.compliance.valueholder.ComplianceThreshold;
 import org.openelisglobal.compliance.valueholder.ThresholdType;
 import org.openelisglobal.dictionary.service.DictionaryService;
 import org.openelisglobal.dictionary.valueholder.Dictionary;
+import org.openelisglobal.microbiology.dao.MicroCaseAnalysisDAO;
 import org.openelisglobal.result.service.ResultService;
 import org.openelisglobal.result.valueholder.Result;
 import org.openelisglobal.sample.dao.SampleComplianceStandardDAO;
@@ -27,6 +30,7 @@ import org.openelisglobal.sample.valueholder.Sample;
 import org.openelisglobal.sample.valueholder.SampleComplianceStandard;
 import org.openelisglobal.sampleitem.service.SampleItemService;
 import org.openelisglobal.sampleitem.valueholder.SampleItem;
+import org.openelisglobal.typeoftestresult.service.TypeOfTestResultServiceImpl.ResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +77,120 @@ public class ComplianceEvaluationServiceImpl implements ComplianceEvaluationServ
     @Autowired
     private IStatusService statusService;
 
+    @Autowired
+    private MicroCaseAnalysisDAO microCaseAnalysisDAO;
+
+    /**
+     * A test owned by a microbiology case is released with the case's final report,
+     * which the certificate requires separately, so only the other tests must be
+     * validated.
+     */
+    @Override
+    public boolean awaitsValidation(Sample sample) {
+        return orderedTests(sample)
+                .anyMatch(analysis -> !statusService.matches(analysis.getStatusId(), AnalysisStatus.Finalized)
+                        && microCaseAnalysisDAO.getActiveByAnalysisId(analysis.getId()) == null);
+    }
+
+    @Override
+    public int orderedTestCount(Sample sample) {
+        return (int) orderedTests(sample).count();
+    }
+
+    @Override
+    public List<EnvironmentalReportRow> reportRows(Sample sample) {
+        List<SampleComplianceStandard> links = sampleComplianceStandardDAO.getAllForSample(sample.getId());
+        boolean nameStandards = links.size() > 1;
+        List<EnvironmentalReportRow> rows = new ArrayList<>();
+        List<SampleItem> items = new ArrayList<>(sampleItemService.getSampleItemsBySampleId(sample.getId()));
+        items.sort(java.util.Comparator.comparing(item -> sortKey(item.getSortOrder())));
+        for (SampleItem item : items) {
+            String sampleType = item.getTypeOfSample() == null ? null : item.getTypeOfSample().getLocalizedName();
+            for (Analysis analysis : liveTests(item)) {
+                if (analysis.getTest() == null
+                        || !statusService.matches(analysis.getStatusId(), AnalysisStatus.Finalized)) {
+                    continue;
+                }
+                List<Result> results = resultService.getResultsByAnalysis(analysis);
+                if (results.isEmpty()) {
+                    continue;
+                }
+                String parameter = analysis.getTest().getName();
+                String result = displayValue(results);
+                String unit = analysis.getTest().getUnitOfMeasure() == null ? null
+                        : analysis.getTest().getUnitOfMeasure().getUnitOfMeasureName();
+                String method = analysis.getMethod() != null ? analysis.getMethod().getMethodName()
+                        : analysis.getTest().getMethod() == null ? null
+                                : analysis.getTest().getMethod().getMethodName();
+                boolean judged = false;
+                for (SampleComplianceStandard link : links) {
+                    ComplianceStandard standard = link.getComplianceStandard();
+                    List<ComplianceThreshold> thresholds = complianceThresholdService
+                            .getThresholdsByTestAndStandard(analysis.getTest().getId(), standard.getId()).stream()
+                            .filter(threshold -> !Boolean.FALSE.equals(threshold.getIsActive())).toList();
+                    if (thresholds.isEmpty()) {
+                        continue;
+                    }
+                    ParameterResult judgement = buildParameterResult(thresholds, results.get(0).getValue(),
+                            nameStandards ? standardLabel(standard) : null);
+                    rows.add(new EnvironmentalReportRow(item.getSortOrder(), sampleType, parameter, result,
+                            unit != null ? unit : judgement.getUnits(), method, judgement.getThresholdDisplay(),
+                            judgement.getStatus()));
+                    judged = true;
+                }
+                if (!judged) {
+                    rows.add(new EnvironmentalReportRow(item.getSortOrder(), sampleType, parameter, result, unit,
+                            method, null, null));
+                }
+            }
+        }
+        return rows;
+    }
+
+    private static int sortKey(String sortOrder) {
+        try {
+            return Integer.parseInt(sortOrder);
+        } catch (RuntimeException e) {
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    /** A select-list result reads as its option; a multi-select as its options. */
+    private String displayValue(List<Result> results) {
+        Result first = results.get(0);
+        if (!ResultType.isDictionaryVariant(first.getResultType())) {
+            return first.getValue();
+        }
+        List<Result> shown = ResultType.isMultiSelectVariant(first.getResultType()) ? results : List.of(first);
+        return shown.stream().map(Result::getValue).filter(value -> value != null && !value.isBlank())
+                .map(value -> dictionaryText(value.trim())).collect(Collectors.joining(", "));
+    }
+
+    private Stream<Analysis> orderedTests(Sample sample) {
+        return sampleItemService.getSampleItemsBySampleId(sample.getId()).stream()
+                .flatMap(item -> liveTests(item).stream());
+    }
+
+    /**
+     * The analyses of each test at its latest revision among those not cancelled. A
+     * test removed from the order and added back has a new analysis at a lower
+     * revision than its cancelled copy, so the latest revision is taken among the
+     * live ones only; several live analyses of a test at that revision all count.
+     */
+    private List<Analysis> liveTests(SampleItem sampleItem) {
+        List<Analysis> live = analysisService.getAnalysesBySampleItem(sampleItem).stream()
+                .filter(analysis -> analysis.getTest() != null)
+                .filter(analysis -> !statusService.matches(analysis.getStatusId(), AnalysisStatus.Canceled)).toList();
+        Map<String, Integer> latest = new HashMap<>();
+        live.forEach(analysis -> latest.merge(analysis.getTest().getId(), revision(analysis), Math::max));
+        return live.stream().filter(analysis -> revision(analysis) == latest.get(analysis.getTest().getId())).toList();
+    }
+
+    private static int revision(Analysis analysis) {
+        String revision = analysis.getRevision();
+        return revision == null || revision.isBlank() ? 0 : Integer.parseInt(revision.trim());
+    }
+
     @Override
     public ComplianceEvaluationResult evaluate(Sample sample) {
         List<SampleComplianceStandard> links = sampleComplianceStandardDAO.getAllForSample(sample.getId());
@@ -88,7 +206,7 @@ public class ComplianceEvaluationServiceImpl implements ComplianceEvaluationServ
         boolean nameStandards = links.size() > 1;
         List<ParameterResult> paramResults = new ArrayList<>();
         for (SampleItem sampleItem : sampleItems) {
-            List<Analysis> analyses = analysisService.getMaxRevisionAnalysesBySample(sampleItem);
+            List<Analysis> analyses = liveTests(sampleItem);
             for (Analysis analysis : analyses) {
                 if (analysis.getTest() == null
                         || !statusService.matches(analysis.getStatusId(), AnalysisStatus.Finalized)) {
@@ -109,8 +227,10 @@ public class ComplianceEvaluationServiceImpl implements ComplianceEvaluationServ
                     if (results.isEmpty()) {
                         break;
                     }
-                    paramResults.add(buildParameterResult(thresholds, results.get(0).getValue(),
-                            nameStandards ? standardLabel(standard) : null));
+                    ParameterResult judged = buildParameterResult(thresholds, results.get(0).getValue(),
+                            nameStandards ? standardLabel(standard) : null);
+                    judged.setAnalysisId(analysis.getId());
+                    paramResults.add(judged);
                 }
             }
         }
