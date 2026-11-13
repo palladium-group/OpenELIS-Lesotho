@@ -170,6 +170,26 @@ public class SampleOrderService {
                     observationHistoryService.getValueForSample(ObservationType.NEXT_VISIT_DATE, sample.getId()));
             sampleOrder.setPaymentOptionSelection(
                     observationHistoryService.getRawValueForSample(ObservationType.PAYMENT_STATUS, sample.getId()));
+            sampleOrder.setTbOrderReason(
+                    observationHistoryService.getRawValueForSample(ObservationType.TB_ORDER_REASON, sample.getId()));
+            sampleOrder.setTbPatientNumber(
+                    observationHistoryService.getValueForSample(ObservationType.TB_PATIENT_NUMBER, sample.getId()));
+            sampleOrder.setTbSuspectNumber(
+                    observationHistoryService.getValueForSample(ObservationType.TB_SUSPECT_NUMBER, sample.getId()));
+            sampleOrder.setTbTestRequest(
+                    observationHistoryService.getValueForSample(ObservationType.TB_TEST_REQUEST, sample.getId()));
+            sampleOrder.setTbReferredTo(
+                    observationHistoryService.getValueForSample(ObservationType.TB_REFERRED_TO, sample.getId()));
+            sampleOrder.setTbSampleNumber(
+                    observationHistoryService.getValueForSample(ObservationType.TB_SAMPLE_NUMBER, sample.getId()));
+            sampleOrder.setTbClinicalDetails(
+                    observationHistoryService.getValueForSample(ObservationType.TB_CLINICAL_DETAILS, sample.getId()));
+            sampleOrder.setTbClinicianName(
+                    observationHistoryService.getValueForSample(ObservationType.TB_CLINICIAN_NAME, sample.getId()));
+            sampleOrder.setTbDateProcessed(
+                    observationHistoryService.getValueForSample(ObservationType.TB_DATE_PROCESSED, sample.getId()));
+            sampleOrder.setTbSignature(
+                    observationHistoryService.getValueForSample(ObservationType.TB_SIGNATURE, sample.getId()));
             sampleOrder.setTestLocationCode(
                     observationHistoryService.getRawValueForSample(ObservationType.TEST_LOCATION_CODE, sample.getId()));
             sampleOrder.setOtherLocationCode(observationHistoryService
@@ -405,6 +425,26 @@ public class SampleOrderService {
                 sampleOrder.getOtherLocationCode(), ValueType.LITERAL);
         createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.PAYMENT_STATUS,
                 sampleOrder.getPaymentOptionSelection(), ValueType.DICTIONARY);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_ORDER_REASON,
+                sampleOrder.getTbOrderReason(), ValueType.DICTIONARY);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_PATIENT_NUMBER,
+                sampleOrder.getTbPatientNumber(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_SUSPECT_NUMBER,
+                sampleOrder.getTbSuspectNumber(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_TEST_REQUEST,
+                sampleOrder.getTbTestRequest(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_REFERRED_TO,
+                sampleOrder.getTbReferredTo(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_SAMPLE_NUMBER,
+                sampleOrder.getTbSampleNumber(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_CLINICAL_DETAILS,
+                sampleOrder.getTbClinicalDetails(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_CLINICIAN_NAME,
+                sampleOrder.getTbClinicianName(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_DATE_PROCESSED,
+                sampleOrder.getTbDateProcessed(), ValueType.LITERAL);
+        createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.TB_SIGNATURE,
+                sampleOrder.getTbSignature(), ValueType.LITERAL);
         createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.REQUEST_DATE,
                 sampleOrder.getRequestDate(), ValueType.LITERAL);
         createOrUpdateObservation(currentUserId, observations, patientId, ObservationType.PROGRAM,

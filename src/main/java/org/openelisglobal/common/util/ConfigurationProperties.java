@@ -206,6 +206,8 @@ public abstract class ConfigurationProperties {
                                                                       // patient
         PATIENT_SEX_REQUIRED("Patient sex required", "text"), // True if patient sex is required for new patient
         PATIENT_AGE_REQUIRED("Patient age required", "text"), // True if patient age/DOB is required for new patient
+        PATIENT_ART_NUMBER_SHOWN("ART number shown", "text"), // True if the ART number field is shown
+        PATIENT_ART_NUMBER_REQUIRED("ART number required", "text"), // True if the ART number is required
         QA_SAMPLE_ID_REQUIRED("sample id required", "text"), // True if sample id required from referring lab
 
         MAX_ORDER_LABEL_PRINTED("numMaxOrderLabels", "text"), // Max order labels that can be printed

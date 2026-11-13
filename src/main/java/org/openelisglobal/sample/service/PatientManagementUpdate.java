@@ -16,6 +16,8 @@ import org.openelisglobal.address.valueholder.AddressPart;
 import org.openelisglobal.address.valueholder.PersonAddress;
 import org.openelisglobal.common.action.IActionConstants;
 import org.openelisglobal.common.exception.LIMSRuntimeException;
+import org.openelisglobal.common.util.ConfigurationProperties;
+import org.openelisglobal.common.util.ConfigurationProperties.Property;
 import org.openelisglobal.common.util.ControllerUtills;
 import org.openelisglobal.common.validator.BaseErrors;
 import org.openelisglobal.login.valueholder.UserSessionData;
@@ -181,6 +183,11 @@ public class PatientManagementUpdate extends ControllerUtills implements IPatien
         persistIdentityType(patientInfo.getInsuranceNumber(), "INSURANCE");
         persistIdentityType(patientInfo.getOccupation(), "OCCUPATION");
         persistIdentityType(patientInfo.getCustomNotes(), "CUSTOM_NOTES");
+        if (ConfigurationProperties.getInstance().isPropertyValueEqual(Property.PATIENT_ART_NUMBER_SHOWN, "true")
+                || ConfigurationProperties.getInstance().isPropertyValueEqual(Property.PATIENT_ART_NUMBER_REQUIRED,
+                        "true")) {
+            persistIdentityType(patientInfo.getArtNumber(), "ART");
+        }
         persistIdentityType(patientInfo.getTargetDiseaseProgramme(), "DISEASE_PROGRAMME");
         persistIdentityType(patientInfo.getSubjectNumber(), "SUBJECT");
         persistIdentityType(patientInfo.getMothersInitial(), "MOTHERS_INITIAL");

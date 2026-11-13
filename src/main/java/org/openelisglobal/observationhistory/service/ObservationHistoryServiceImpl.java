@@ -33,7 +33,11 @@ public class ObservationHistoryServiceImpl extends AuditableBaseObjectServiceImp
         TB_DIAGNOSTIC_REASON("TbDiagnosticReason"), TB_FOLLOWUP_REASON("TbFollowupReason"),
         TB_FOLLOWUP_PERIOD_LINE1("TbFollowupReasonPeriodLine1"),
         TB_FOLLOWUP_PERIOD_LINE2("TbFollowupReasonPeriodLine2"), TB_ANALYSIS_METHOD("TbAnalysisMethod"),
-        TB_SAMPLE_ASPECT("TbSampleAspects"), PROVISIONAL_CLINICAL_DIAGNOSIS("provisionalClinicalDiagnosis"),
+        TB_SAMPLE_ASPECT("TbSampleAspects"), TB_PATIENT_NUMBER("TbPatientNumber"), TB_SUSPECT_NUMBER("TbSuspectNumber"),
+        TB_TEST_REQUEST("TbTestRequest"), TB_REFERRED_TO("TbReferredTo"), TB_SAMPLE_NUMBER("TbSampleNumber"),
+        TB_CLINICAL_DETAILS("TbClinicalDetails"), TB_CLINICIAN_NAME("TbClinicianName"),
+        TB_DATE_PROCESSED("TbDateProcessed"), TB_SIGNATURE("TbSignature"),
+        PROVISIONAL_CLINICAL_DIAGNOSIS("provisionalClinicalDiagnosis"),
         // Environmental workflow observation types (OGC-356)
         ENV_COLLECTION_SITE_DESCRIPTION("envCollectionSiteDescription"),
         ENV_REQUESTER_REFERENCE("envRequesterReference"), ENV_ENVIRONMENTAL_CONDITIONS("envEnvironmentalConditions"),
